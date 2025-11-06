@@ -1,20 +1,30 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# FRESHYX Full-Stack Application
 
-# Run and deploy your AI Studio app
+This repository contains the full source code for the FRESHYX application, structured as a monorepo with a separate frontend and backend.
 
-This contains everything you need to run your app locally.
+## Structure
 
-View your app in AI Studio: https://ai.studio/apps/drive/1yDqUc0VAwCOnN_BmZvKKJmmQYp6rx0Rj
+-   `/frontend`: Contains the React frontend application.
+-   `/backend`: Contains the NestJS backend API.
 
-## Run Locally
+## How to Run
 
-**Prerequisites:**  Node.js
+### Backend Server
 
+1.  Navigate to the backend directory:
+    ```bash
+    cd backend
+    ```
+2.  Install the dependencies:
+    ```bash
+    npm install
+    ```
+3.  Start the development server:
+    ```bash
+    npm run start:dev
+    ```
+    The backend API will be running on `http://localhost:3001`.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Frontend Application
+
+Please follow the instructions provided by your development environment to run the frontend application located in the `/frontend` directory. It is configured to connect to the backend server at `http://localhost:3001`.

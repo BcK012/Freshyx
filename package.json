@@ -1,21 +1,15 @@
 {
-  "name": "freshyx---technology-for-the-environment",
+  "name": "freshyx-monorepo",
+  "version": "1.0.0",
+  "description": "Monorepo for the FRESHYX full-stack application, containing both the React frontend and the NestJS backend.",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "install:backend": "cd backend && npm install",
+    "start:backend": "cd backend && npm run start:dev",
+    "start:frontend": "echo \"Please use your development environment's command to serve the frontend from the /frontend directory.\""
   },
-  "dependencies": {
-    "react-dom": "^19.2.0",
-    "react": "^19.2.0"
-  },
-  "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
-  }
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
 }
