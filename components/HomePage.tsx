@@ -1,4 +1,5 @@
 import React from 'react';
+import { Page, FormType } from '../App';
 import Hero from './Hero';
 import Projects from './Projects';
 import Participate from './Participate';
@@ -7,13 +8,13 @@ import InfoAndMission from './InfoAndMission';
 import Impact from './Impact';
 import Testimonials from './Testimonials';
 import Partners from './Partners';
-import { FormType } from '../App';
 
 interface HomePageProps {
   onFormOpen: (type: FormType) => void;
+  onNavigate: (page: Page) => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ onFormOpen }) => {
+const HomePage: React.FC<HomePageProps> = ({ onFormOpen, onNavigate }) => {
   return (
     <>
       <Hero onFormOpen={onFormOpen} />

@@ -7,56 +7,104 @@ import AboutPage from './components/AboutPage';
 import PartnersPage from './components/PartnersPage';
 import NewsPage from './components/NewsPage';
 import FormPage from './components/FormPage';
+import PartnerDetailPage from './components/PartnerDetailPage';
 
-export type Page = 'home' | 'projects' | 'about' | 'partners' | 'news' | 'form';
-export type FormType = 'join' | 'register' | 'internship';
+// Define types that are used across the app
+export type Page = 'home' | 'projects' | 'about' | 'partners' | 'news' | `partner/${string}`;
+export type FormType = 'register' | 'join' | 'internship';
+
+interface AppState {
+  currentPage: Page;
+  currentForm: FormType | null;
+  selectedPartnerId: string | null;
+}
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  const [formType, setFormType] = useState<FormType>('join');
+  const [currentForm, setCurrentForm] = useState<FormType | null>(null);
+  const [selectedPartnerId, setSelectedPartnerId] = useState<string | null>(null);
+
 
   const handleNavigate = (page: Page) => {
     setCurrentPage(page);
-    window.scrollTo(0, 0); // Scroll to top on page change
+    setCurrentForm(null);
+    setSelectedPartnerId(null);
+    window.scrollTo(0, 0);
   };
 
   const handleFormOpen = (type: FormType) => {
-    setFormType(type);
-    setCurrentPage('form');
+    setCurrentForm(type);
     window.scrollTo(0, 0);
+  };
+
+  const handleBack = () => {
+    setCurrentForm(null);
+    setSelectedPartnerId(null);
+    if(currentPage.startsWith('partner/')) {
+        setCurrentPage('partners');
+    }
+  };
+
+  const handlePartnerSelect = (id: string) => {
+    setCurrentPage(`partner/${id}`);
+    setSelectedPartnerId(id);
+    window.scrollTo(0, 0);
+  }
+  
+  const renderForm = () => {
+    if (!currentForm) return null;
+    
+    let title = '';
+    let description = '';
+    
+    switch(currentForm) {
+      case 'register':
+        title = "S'inscrire";
+        description = "Remplissez le formulaire ci-dessous pour créer votre compte et commencer votre voyage avec FRESHYX.";
+        break;
+      case 'join':
+        title = "Rejoignez-nous";
+        description = "Devenez membre de notre communauté et participez à nos initiatives pour un avenir plus vert.";
+        break;
+      case 'internship':
+        title = "Devenez Stagiaire";
+        description = "Postulez pour un stage et acquérez une expérience pratique en travaillant sur des projets environnementaux impactants.";
+        break;
+    }
+
+    return <FormPage title={title} description={description} onBack={handleBack} />;
   }
 
   const renderPage = () => {
+    if (currentForm) {
+      return renderForm();
+    }
+    
+    if (currentPage.startsWith('partner/')) {
+        const partnerId = currentPage.split('/')[1];
+        return <PartnerDetailPage partnerId={partnerId} onBack={() => handleNavigate('partners')} />;
+    }
+
     switch (currentPage) {
+      case 'home':
+        return <HomePage onFormOpen={handleFormOpen} onNavigate={handleNavigate}/>;
       case 'projects':
         return <ProjectsPage />;
       case 'about':
         return <AboutPage />;
       case 'partners':
-        return <PartnersPage />;
+        return <PartnersPage onPartnerSelect={handlePartnerSelect} />;
       case 'news':
         return <NewsPage />;
-      case 'form':
-        const formDetails = {
-            join: { title: 'Rejoignez Notre Communauté', description: 'Devenez membre pour participer à nos activités, développer vos compétences et agir pour l\'environnement.' },
-            register: { title: 'Inscrivez-vous', description: 'Créez votre compte pour accéder à toutes les opportunités et rester informé de nos dernières actualités.' },
-            internship: { title: 'Devenez Stagiaire', description: 'Postulez pour une de nos opportunités de stage et gagnez une expérience précieuse en travaillant sur des projets concrets.' },
-        };
-        return <FormPage 
-            title={formDetails[formType].title} 
-            description={formDetails[formType].description}
-            onBack={() => handleNavigate('home')}
-        />;
-      case 'home':
       default:
-        return <HomePage onFormOpen={handleFormOpen} />;
+        return <HomePage onFormOpen={handleFormOpen} onNavigate={handleNavigate}/>;
     }
   };
 
   return (
-    <div className="bg-[#F9FAFB] text-[#002D25] overflow-x-hidden min-h-screen flex flex-col">
+    <div className="bg-[#F9FAFB] text-gray-800 font-sans">
       <Header onNavigate={handleNavigate} onFormOpen={handleFormOpen} />
-      <main className="flex-grow">
+      <main>
         {renderPage()}
       </main>
       <Footer onNavigate={handleNavigate} onFormOpen={handleFormOpen} />
